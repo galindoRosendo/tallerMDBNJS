@@ -1,0 +1,19 @@
+db.alumnos.insertMany([
+  {
+  "_id":11100240,
+  "nombre":"Luis",
+  "Apellido":"Garcia"
+  },{
+  "_id":11100241,
+  "nombre":"Fernando",
+  "Apellido":"Altamirano"
+  },{
+  "_id":11100247,
+  "nombre":"Jose",
+  "Apellido":"Galvan"
+  },{
+  "_id":11100241,
+  "nombre":"Luis",
+  "Apellido":"Rodriguez"
+  }
+]);
