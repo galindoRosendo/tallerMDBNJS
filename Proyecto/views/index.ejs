@@ -1,0 +1,21 @@
+<% include header.html.ejs %>
+
+  <ul class="quotes">
+  <% for(var i=0; i<alumnos.length; i++) {%>
+    <li class="quote">
+      <span><%= alumnos[i].name %></span>
+      <span><%= alumnos[i].control %></span>
+    </li>
+  <% } %>
+  </ul>
+
+  <form action="/quotes" method="POST">
+    <input type="text" placeholder="Nombre" name="name" id="name">
+    <input type="text" placeholder="Numero de control" name="control" id="quote">
+    <input type="submit" value="Registrar">
+  </form>
+
+
+</div>
+
+<% include footer.html.ejs %>

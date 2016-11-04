@@ -1,0 +1,21 @@
+<% include header.html.ejs %>
+
+<ul class="quotes">
+<% for(var i=0; i<alumnos.length; i++) {%>
+  <li class="quote">
+    <span><%= alumnos[i].name %></span>
+    <span><%= alumnos[i].control %></span>
+  </li>
+<% } %>
+</ul>
+
+<div class="formi">
+  <form >
+    <input type="text" placeholder="Nombre" name="name" id="name">
+    <input type="text" placeholder="Numero de control" name="control" id="control">
+  </form>
+<h2>Boton para reemplazar informacion de documento</h2>
+<input type="button" value ="Reemplazar" id="update">
+</div>
+<script type="text/javascript" src="update.js"></script>
+<% include footer.html.ejs %>

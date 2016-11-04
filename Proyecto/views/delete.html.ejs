@@ -1,0 +1,20 @@
+<% include header.html.ejs %>
+
+<ul class="quotes">
+<% for(var i=0; i<alumnos.length; i++) {%>
+  <li class="quote">
+    <span><%= alumnos[i].name %></span>
+    <span><%= alumnos[i].control %></span>
+  </li>
+<% } %>
+</ul>
+
+<div class="formi">
+  <form >
+    <input type="text" placeholder="Numero de control" name="control" id="control">
+  </form>
+  <h2>Boton para borrar documentos</h2>
+  <input type="button" value ="Borrar" id="delete">
+</div>
+<script type="text/javascript" src="delete.js"></script>
+<% include footer.html.ejs %>
