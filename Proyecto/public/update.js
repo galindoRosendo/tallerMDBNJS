@@ -6,7 +6,7 @@ update.addEventListener('click', function () {
   var  control = document.getElementById('control').value;
 
   // Send PUT Request here
-  fetch('quotes', {
+  fetch('alumnos', {
   method: 'put',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({

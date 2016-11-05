@@ -1,0 +1,11 @@
+CRUD
+Create
+Read
+Update
+Delete
+
+
+Creacion de documentos en MongoDB
+-insertOne()
+-InserMany()
+-updateCommand ["Upserts"]

@@ -2,7 +2,7 @@ var del = document.getElementById('delete');
 
 del.addEventListener('click', function () {
   var  control = document.getElementById('control').value;
-  fetch('quotes', {
+  fetch('alumnos', {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json'

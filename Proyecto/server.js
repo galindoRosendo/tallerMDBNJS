@@ -47,7 +47,7 @@ app.get('/delete', (req, res) => {
   //console.log(__dirname);
 });
 
-app.post('/quotes', (req, res) => {
+app.post('/alumnos', (req, res) => {
   db.collection('alumnos').save(req.body, (err, result) => {
     if (err) return console.log(err)
 
@@ -57,7 +57,7 @@ app.post('/quotes', (req, res) => {
   //console.log(req.body);
 });
 
-app.put('/quotes', (req, res) => {
+app.put('/alumnos', (req, res) => {
   // Handle put request
   //console.log(req);
   db.collection('alumnos').findOneAndUpdate(
@@ -75,7 +75,7 @@ app.put('/quotes', (req, res) => {
   });
 });
 
-app.delete('/quotes', (req, res) => {
+app.delete('/alumnos', (req, res) => {
   //console.log(req);
   db.collection('alumnos').findOneAndDelete({control: req.body.control},
   (err, result) => {

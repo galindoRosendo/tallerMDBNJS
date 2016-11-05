@@ -9,10 +9,12 @@ Primero un poco de historia. En 1995 (hace 20 años!) Brendan Eich crea un lengu
 ### ¡Advertencia!: aclarar lo siguiente Java != JavaScript.
 
 En 1997 se crea un comité (TC39) para estadarizar JavaScript por la European Computer Manufacturers' Association, ECMA. Se diseña el estándar del DOM (Document Object Model) para evitar incompatibilidades entre navegadores. A partir de entonces los estándares de JavaScript se rigen por ECMAScript.
-![alt tag](00_resources/cronologia-javascript-1.png)
+
+![alt tag](00_resources/img/cronologia-javascript-1.png)
 
 En 1999 aparece la 3a versión del estándar ECMAScript, que se mantendría vigente hasta hace pocos años. Hubo pequeños intentos de escribir la versión 4, pero hasta 2011 no se aprobó y se estandarizó la versíon 5 (ES5) que es la que usamos hoy en día.
-![alt tag](00_resources/cronologia-javascript-2.png)
+
+![alt tag](00_resources/img/cronologia-javascript-2.png)
 
 En junio de 2013 quedó parado el borrador de la versión 6, pero en Diciembre de 2014 se aprobó al fin y se espera su estandarización a partir de Junio de 2015.
 
@@ -384,7 +386,7 @@ Los programadores de JavaScript tienden a utilizar camel case que comienza con u
 
 nombre, apellido, MasterCard, interurbanos.
 
-![alt tag](00_resources/pic_camelcase.jpg)
+![alt tag](00_resources/img/pic_camelcase.jpg)
 
 # JavaScript (conjunto de caracteres)
 
