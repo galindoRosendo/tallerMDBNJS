@@ -373,3 +373,310 @@ app.get('/', (req, res) => {
   })
 })
 ```
+
+Ahora, al actualizar el navegador, usted debería ser capaz de ver los alumnos almacenados en la base de datos.
+
+# CRUD - ACTUALIZACIÓN
+
+La operación ACTUALIZACIÓN se utiliza cuando se quiere cambiar algo. Sólo puede ser desencadenada por los navegadores a través de una peticion PUT . Al igual que la solicitud POST , la solicitud PUT puede ser activada ya sea a través de JavaScript o a través de una etiqueta <form>.
+
+Vamos a tratar de desencadenar una solicitud PUT a través de JavaScript en esta ocasión puesto que ya hemos aprendido cómo activar una solicitud a través de un elemento <form> al pasar por la peticion POST en la seccion anterior.
+
+Vamos a crear un botón que, cuando se hace clic, se sustituirá el numero de control de un nombre dado.
+
+Para ello, primero vamos a crear un archivo llamado update.html.ejs:
+```html
+<% include header.html.ejs %>
+<ul class="quotes">
+<% for(var i=0; i<alumnos.length; i++) {%>
+  <li class="quote">
+    <span><%= alumnos[i].name %></span>
+    <span><%= alumnos[i].control %></span>
+  </li>
+<% } %>
+</ul>
+
+<div class="formi">
+  <form >
+    <input type="text" placeholder="Nombre" name="name" id="name">
+    <input type="text" placeholder="Numero de control" name="control" id="control">
+  </form>
+<h2>Boton para reemplazar informacion de documento</h2>
+<input type="button" value ="Reemplazar" id="update">
+</div>
+<script type="text/javascript" src="update.js"></script>
+<% include footer.html.ejs %>
+```
+
+También vamos a crear un archivo JavaScript externo para ejecutar la peticion PUT cuando se haga clic en el botón. De acuerdo con las convenciones Express, este archivo se coloca en una carpeta llamada public
+```
+$ mkdir public
+$ touch public/update.js
+```
+Entonces, tenemos que decirle a Express para hacer esta carpeta accesible al público mediante el uso de un middleware incorporado llamado express.static
+```JavaScript
+app.use(express.static('public'))
+```
+
+Una vez hecho esto, podemos añadir el archivo update.js al archivo update.ejs:
+```html
+<!-- ... -->
+<script src="update.js"></script>
+</body>
+```
+
+A continuación, vamos a enviar la peticion PUT cuando se hace clic en el botón:
+```javascript
+// update.js
+var update = document.getElementById('update')
+
+update.addEventListener('click', function () {
+  // Send PUT Request here
+})
+```
+
+La forma más fácil de activar una solicitud PUT en los navegadores modernos es utilizar la API de Fetch . Sólo es compatible con Firefox, Chrome y Opera.
+
+Vamos a enviar la siguiente petición de recuperación al servidor.
+
+```javascript
+fetch('alumnos', {
+method: 'put',
+headers: {'Content-Type': 'application/json'},
+body: JSON.stringify({
+  'name': name,
+  'control': control
+})
+})
+```
+
+Fetch toma en dos parámetros. El primer parámetro es un camino. En este caso, estamos enviando la solicitud a /alumnos, que será manejado en nuestro servidor.
+
+El segundo parámetro, options, es un objeto opcional que le permite controlar una serie de situaciones diferentes. Los que usamos anteriormente son method, headers y body.
+method es sencillo. Hemos establecido el method que ya estamos enviando una solicitud PUT.
+headers aquí se refiere a Encabezados HTTP que desea enviar al servidor. Es un objeto con varios pares de valores clave.
+body se refiere al contenido que usted envíe al servidor.
+
+Hemos convertido las variables nombre  y control en JSON en el body con JSON.stringify. Estamos haciendo estos pasos, ya que estamos enviando la informacion en el formato JSON (un formato estándar para el envío de información en la web) en el servidor.
+
+Por desgracia, nuestro servidor no lee datos JSON todavía. Podemos enseñar a leer los datos JSON utilizando el middleware  bodyparser.json():
+
+```javascript
+app.use(bodyParser.json())
+```
+
+Una vez que hemos hecho todo lo anterior, vamos a ser capaces de manejar esta solicitud PUT utilizando el método put:
+```javascript
+app.put('/alumnos', (req, res) => {
+  // Handle put request
+})
+```
+El próximo paso, entonces, es aprender a buscar el alumnos con cierta informacion.
+
+## Actualización de una colección en MongoDB
+
+El driver de MongoDB viene con un método llamado findOneAndUpdateque nos permite cambiar un elemento de la base de datos. Toma en cuatro parámetros - query, update, options y callback.
+```JavaScript
+db.collections('alumnos').findOneAndUpdate(
+  query,
+  update,
+  options,
+  callback
+)
+```
+
+El primer parámetro,query , nos permite filtrar la colección a través de pares de clave y valor dado a la misma. Podemos filtrar la colección alumnos ajustando el name como variable.
+```javascript
+{
+  name: name
+}
+```
+El segundo parámetro, update, dice a MongoDB qué hacer con la solicitud de actualización. Utiliza operadores de actualización de MongoDB como $set, $inc y $push. Vamos a utilizar el operador $set ya que estamos cambiando la informacion de alumnos:
+```javascript
+{
+  $set: {
+    name: req.body.name,
+    control: req.body.control
+  }
+}
+```
+
+El tercer parámetro, options, es un parámetro opcional que le permite definir las cosas adicionales. Ya que estamos en busca del nombre de un alumno, vamos a establecer sort dentro de las opciones a {_id: -1}. Esto permite a MongoDB buscar a través de la base de datos, a partir de la entrada más reciente.
+```javascript
+{
+  sort: {_id:-1}
+}
+```
+
+Hay una posibilidad de que no existan registros en nuestra base de datos. MongoDB no hace nada por defecto cuando esto sucede. Podemos obligarlo a crear una nueva entrada si fijamos la opción upsert, lo que significa insertar (o guardar) si no se encuentran entradas, como true:
+```javascript
+{
+  sort: {_id: -1},
+  upsert: true
+}
+```
+
+El último parámetro es una función de devolución de llamada que le permite hacer algo una vez MongoDB ha sustituido la informacion. En este caso, podemos enviar los resultados a la solicitud de obtención de información.
+```javascript
+(err, result) => {
+  if (err) return res.send(err)
+  res.send(result)
+}
+```
+
+Aquí está todo el findOneAndUpdatecomando que hemos escrito en los dos pasos anteriores:
+```JavaScript
+app.put('/alumnos', (req, res) => {
+  // Handle put request
+  //console.log(req);
+  db.collection('alumnos').findOneAndUpdate(
+    {name: req.body.name}, {
+    $set: {
+      name: req.body.name,
+      control: req.body.control
+    }
+  }, {
+    sort: {_id: -1},
+    upsert: true
+  }, (err, result) => {
+    if (err) return res.send(err)
+    res.send(result)
+  });
+});
+```
+
+Ahora, cada vez que alguien hace clic en el botón de actualización, el navegador enviará una solicitud PUT a través de Fetch a nuestro servidor Express.
+
+La forma correcta de comprobar si la peticion se ha resuelto con éxito es utilizar el método ok en el objeto response. A continuación, puede agregar return res.json(), si desea leer los datos que se envían desde el servidor:
+```JavaScript
+fetch({ /* request */  })
+.then(res => {
+  if (res.ok) return res.json()
+})
+.then(data => {
+  console.log(data)
+})
+```
+
+Agregando esta parte en la que utiliza JavaScript para actualizar el DOM para que los usuarios puedan ver los nuevos cambios de forma inmediata.
+```javascript
+fetch({ /* request */ })
+.then(res => {
+  if (res.ok) return res.json()
+})
+.then(data => {
+  console.log(data)
+  window.location.reload(true)
+})
+```
+
+Eso es todo por la operación UPDATE! Vamos a pasar a la final - BORRAR.
+
+# CRUD - BORRAR
+
+La operación DELETE sólo puede ser activado a través de una petición DELETE. Es similar a la peticion ACTUALIZACIÓN, por lo que es simple si se entiende lo que hemos hecho anteriormente.
+
+Para esta parte, vamos a aprender a eliminar un alumnos por su numero de control. Para hacerlo, primero tenemos que añadir un botón para el archivo delete.html.ejs. Pero antes crear un archivo llamado update.html.ejs.
+```html
+<% include header.html.ejs %>
+<ul class="quotes">
+<% for(var i=0; i<alumnos.length; i++) {%>
+  <li class="quote">
+    <span><%= alumnos[i].name %></span>
+    <span><%= alumnos[i].control %></span>
+  </li>
+<% } %>
+</ul>
+
+<div class="formi">
+  <form >
+    <input type="text" placeholder="Numero de control" name="control" id="control">
+  </form>
+  <h2>Boton para borrar documentos</h2>
+  <input type="button" value ="Borrar" id="delete">
+</div>
+<script type="text/javascript" src="delete.js"></script>
+<% include footer.html.ejs %>
+```
+
+A continuación, vamos a desencadenar una solicitud BORRAR a través de Fetch cada vez que se hace clic en el botón de borrar:
+```JavaScript
+var del = document.getElementById('delete');
+
+del.addEventListener('click', function () {
+  var  control = document.getElementById('control').value;
+  fetch('alumnos', {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'control': control
+    })
+  }).then(res => {
+  if (res.ok) return res.json()
+}).then(data => {
+  console.log(data);
+  window.location.reload(true)
+})
+});
+
+```
+
+A continuación, podemos controlar el evento en nuestro lado del servidor con el deletemétodo:
+```JavaScript
+app.delete('/alumnos', (req, res) => {
+  // Handle delete event here
+})
+```
+
+## Eliminación de una entrada en MongoDB
+El driver de MongoDB vienen con un método llamado findOneAndDeleteque nos permite eliminar un elemento de la base de datos. Toma en tres parámetros - query, options y un callback. Estos parámetros son exactamente los mismos que los que se utilizó en findOneAndUpdate a la hora de actualizar una entrada en MongoDB. La única diferencia aquí es que no hay upsert dentro de options.
+```JavaScript
+db.collections('alumnos').findOneAndDelete(
+  query,
+  options,
+  callback
+)
+```
+
+Recuerde, estamos tratando de eliminar el alumno con un numero de control en especifico. Para ello, vamos a filtrar la colección alumnos por el numero de control de la peticion. El parámetro query es por lo tanto:
+```JavaScript
+{
+  name: req.body.control
+}
+```
+
+Podemos omitir el parámetro options ya que no tenemos que invertir el orden de clasificación. Entonces, podemos enviar una copia de la respuesta a la solicitud Fetch en la función de devolución de llamada.
+```javascript
+(err, result) => {
+  if (err) return res.send(500, err)
+  res.send(result)
+});
+```
+
+El código completo para el manejador de eliminación es la siguiente:
+
+```JavaScript
+app.delete('/alumnos', (req, res) => {
+  //console.log(req);
+  db.collection('alumnos').findOneAndDelete({control: req.body.control},
+  (err, result) => {
+    if (err) return res.send(500, err)
+    res.send(result)
+  });
+});
+```
+Ahora, cada vez que alguien hace clic en el botón de borrar, el navegador enviará una solicitud BORRAR a través de Fetch a nuestro servidor Express. A continuación, el servidor responde enviando ya sea un error o un mensaje de vuelta.
+Al igual que antes, podemos recargar la página web cuando la zona de alcance se ha completado con éxito.
+```JavaScript
+fetch({ /* request */ })
+.then(res => {
+  if (res.ok) return res.json()
+})
+.then(data => {
+  console.log(data)
+  window.location.reload(true)
+})
+```
+Eso es todo por la operación DELETE !
