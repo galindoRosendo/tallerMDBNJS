@@ -6,10 +6,10 @@ MongoDB es un gestor de base de datos. Este es el lugar donde almacena la inform
 
 CRUD es un acrónimo para crear, leer, actualizar y eliminar. Se trata de un conjunto de operaciones que obtenemos servidores para ejecutar (POST, GET, PUT y DELETE respectivamente). Esto es lo que hace cada operación:
 
-Crear (POST) - Hacer algo
-Leer (GET) - Obtener algo
-Actualización (PUT) - cambiar algo
-Delete (BORRAR) - Quitar algo
+* Crear (POST) - Hacer algo
+* Leer (GET) - Obtener algo
+* Actualización (PUT) - cambiar algo
+* Delete (BORRAR) - Quitar algo
 
 Si ponemos CRUD, Express y MongoDB juntos en un solo diagrama, esto es lo que se vería así:
 ![alt tag](00_resources/img/crud-express-mongo.png)
@@ -33,6 +33,7 @@ Cuando la ejecute el archivo server.js , queremos para asegurarse de que está f
 ```
 console.log('Node funciona :D')
 ```
+
 Ahora, ejecuta node server.js en la línea de comandos y debería ver el mensaje que escribio en la funcion log.
 
 ```
@@ -41,7 +42,7 @@ $node server.js
 ![alt tag](00_resources/img/proy1.jpg)
 
 
-# Utilización de Express
+# Utilizando de Express
 Primero tenemos que instalar express antes de que podamos usar en nuestra aplicación. La instalación Express es bastante fácil. Todo lo que tenemos que hacer es ejecutar un comando de instalación con el administrador de paquetes de Node (NPM), que se suministra junto con Node.
 Ejecuta npm install express --save en la línea de comandos:
 ```
@@ -69,7 +70,7 @@ Eso es una buena señal. Esto significa que ahora podemos comunicar a nuestro se
 
 Aquí es donde comenzamos operaciones CRUD.
 
-# CRUD - LEER
+# CRUD - READ [LEER]
 
 La operación LEER  se realiza por los navegadores cada vez que visita una página web. Bajo el capó, los navegadores envía una solicitud GET al servidor para realizar una operación de lectura. La razón por la que vemos el error "no se puede obtener /" es porque todavía no enviamos nada de vuelta al navegador de nuestro servidor.
 
@@ -139,7 +140,7 @@ Reinicie el servidor y actualice su navegador. Sera capaz de ver los resultados 
 
 En este punto, se habrá dado cuenta de que es necesario reiniciar el servidor cada vez que se realiza un cambio server.js. Este es el proceso es increíblemente tedioso, así que vamos a echar un desvío rápido y hacerlo más eficiente mediante el uso de un paquete llamado nodemon .
 
-# Introduzca Nodemon
+# Usando Nodemon
 Nodemon reinicia el servidor automáticamente cada vez que guarde un archivo que utiliza el servidor. Podemos instalar Nodemon utilizando el siguiente comando:
 ```
 $ npm install nodemon --save-dev
@@ -169,7 +170,8 @@ $npm run dev
 ```
 ![alt tag](00_resources/img/proy5.jpg)
 
-CRUD - CREAR
+# CRUD - CREATE [CREAR]
+
 La operacion CREATE se realiza sólo por el navegador si una solicitud de POST se envía al servidor. Esta solicitud POST puede dispararse tanto con JavaScript o a través de una etiqueta <form>.
 
 Vamos a ver cómo utilizar un etiqueta <form> para crear nuevas entradas para nuestra aplicacion de alumnos.
@@ -376,7 +378,7 @@ app.get('/', (req, res) => {
 
 Ahora, al actualizar el navegador, usted debería ser capaz de ver los alumnos almacenados en la base de datos.
 
-# CRUD - ACTUALIZACIÓN
+# CRUD - UPDATE [ACTUALIZACIÓN]
 
 La operación ACTUALIZACIÓN se utiliza cuando se quiere cambiar algo. Sólo puede ser desencadenada por los navegadores a través de una peticion PUT . Al igual que la solicitud POST , la solicitud PUT puede ser activada ya sea a través de JavaScript o a través de una etiqueta <form>.
 
@@ -572,7 +574,7 @@ fetch({ /* request */ })
 
 Eso es todo por la operación UPDATE! Vamos a pasar a la final - BORRAR.
 
-# CRUD - BORRAR
+# CRUD - DELETE [BORRAR]
 
 La operación DELETE sólo puede ser activado a través de una petición DELETE. Es similar a la peticion ACTUALIZACIÓN, por lo que es simple si se entiende lo que hemos hecho anteriormente.
 
